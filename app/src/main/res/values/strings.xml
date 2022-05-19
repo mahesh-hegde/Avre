@@ -12,4 +12,9 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="code_edit_hint">Enter code to evaluate…</string>
     <string name="eval_button_text">Eval</string>
+    <string name="clear">Clear</string>
+    <string name="button_prev">&#8593;</string>
+    <string name="button_up_description">Previous snippet</string>
+    <string name="button_down_description">Next command in history</string>
+    <string name="button_clear_description">Clear code</string>
 </resources>

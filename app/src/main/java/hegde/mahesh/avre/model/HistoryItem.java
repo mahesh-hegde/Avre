@@ -1,12 +1,9 @@
 package hegde.mahesh.avre.model;
 
-import kotlin.reflect.KVariance;
-
 public class HistoryItem {
-
-    String code;
-    String out, err, res;
-    Exception exception;
+    public String code;
+    public String out, err, res;
+    public Exception exception;
 
     public static HistoryItem success(String code, String out, String err, String res) {
         HistoryItem item = new HistoryItem();

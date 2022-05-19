@@ -3,59 +3,103 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.home.HomeFragment">
 
-    <EditText
-        android:id="@+id/text_code"
-        android:layout_width="353dp"
-        android:layout_height="142dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:fontFamily="monospace"
-        android:gravity="start|top"
-        android:hint="@string/code_edit_hint"
-        android:importantForAutofill="no"
-        android:inputType="textMultiLine"
-        android:textColorHint="#757575"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_eval"
-        android:layout_width="wrap_content"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroller_avre_prompt"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:onClick="evalCode"
-        android:text="@string/eval_button_text"
-        app:layout_constraintStart_toStartOf="@+id/text_code"
-        app:layout_constraintTop_toBottomOf="@+id/text_code" />
-
-    <ScrollView
-        android:layout_width="346dp"
-        android:layout_height="447dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginVertical="24dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.446"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_eval"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/text_result"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/text_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="monospace" />
+                android:layout_marginTop="16dp"
+                android:allowUndo="true"
+                android:ems="10"
+                android:fontFamily="monospace"
+                android:gravity="start|top"
+                android:hint="@string/code_edit_hint"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textNoSuggestions"
+                android:minHeight="48dp"
+                android:textColorHint="#757575"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_eval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="evalCode"
+                    android:text="@string/eval_button_text" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/button_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/button_clear_description"
+                    android:minHeight="48dp"
+                    android:onClick="clearCode"
+                    android:src="@drawable/ic_sharp_clear_24" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/button_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/button_up_description"
+                    android:minHeight="48dp"
+                    android:onClick="prevSnippet"
+                    android:src="@drawable/ic_sharp_arrow_upward_24" />
+
+                <ImageButton
+                    android:id="@+id/button_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/button_down_description"
+                    android:minHeight="48dp"
+                    android:onClick="nextSnippet"
+                    android:src="@drawable/ic_sharp_arrow_downward_24" />
+            </LinearLayout>
+
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
