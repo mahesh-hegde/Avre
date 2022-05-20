@@ -5,35 +5,27 @@ import androidx.annotation.Nullable;
 import java.util.Locale;
 
 public class SnippetEvalException extends Exception {
-    int lineBegin, colBegin;
-    int lineEnd, colEnd;
+    int line = 0;
+    int column = 0;
+    Throwable cause;
 
-    public SnippetEvalException(int lineBegin, int colBegin, String message) {
-        super(message);
-        this.lineBegin = lineBegin;
-        this.colBegin = colBegin;
+    public SnippetEvalException(int line, int column, Throwable cause) {
+        super(cause.getMessage());
+        this.line = line;
+        this.column = column;
+        this.cause = cause;
     }
-
-    public SnippetEvalException(String message) {
-        super(message);
-    }
-
-    public SnippetEvalException(int lineBegin, int colBegin, int lineEnd, int colEnd, String message) {
-        super(message);
-        assert lineBegin != -1;
-        this.lineBegin = lineBegin;
-        this.colBegin = colBegin;
-        this.lineEnd = lineEnd;
-        this.colEnd = colEnd;
+    public SnippetEvalException(Throwable cause) {
+        super(cause.getMessage());
+        this.cause = cause;
     }
 
     @Nullable
     @Override
     public String getMessage() {
-        if (colBegin == -1) {
-            return String.format(Locale.getDefault(), "line %d -> %s", lineBegin, super.getMessage());
+        if (line == 0) {
+            return cause.getMessage();
         }
-        return String.format(Locale.getDefault(),
-                "%d:%d -> %s", lineBegin, colBegin, super.getMessage());
+        return String.format(Locale.getDefault(), "[line %s]: %s", line, cause.toString());
     }
 }

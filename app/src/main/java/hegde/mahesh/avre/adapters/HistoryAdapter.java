@@ -45,7 +45,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryI
         holder.err.setText(current.err);
         if (current.exception != null) {
             holder.result.setText(current.exception.getMessage());
-            holder.result.setHintTextColor(0xffff0000);
+            holder.result.setTextColor(0xffff0000);
         } else {
             holder.result.setText(current.res);
         }

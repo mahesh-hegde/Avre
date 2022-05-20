@@ -1,41 +1,33 @@
 package hegde.mahesh.avre;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
-import android.widget.Button;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.navigation.NavigationView;
+
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import bsh.EvalError;
-import bsh.ParseException;
 import hegde.mahesh.avre.adapters.HistoryAdapter;
 import hegde.mahesh.avre.databinding.ActivityMainBinding;
-import bsh.Interpreter;
+import hegde.mahesh.avre.interpreter.BshInterpreter;
+import hegde.mahesh.avre.interpreter.SnippetEvalException;
+import hegde.mahesh.avre.interpreter.SnippetInterpreter;
 import hegde.mahesh.avre.model.HistoryItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -53,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String wasCurrentlyEditing;
 
-    private Interpreter interpreter;
+    private SnippetInterpreter interpreter;
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
     private final ByteArrayOutputStream err = new ByteArrayOutputStream();
 
@@ -91,21 +83,27 @@ public class MainActivity extends AppCompatActivity {
         historyView.setAdapter(adapter);
         historyView.setLayoutManager(new LinearLayoutManager(this));
 
+        // TODO: Should not really need this
+        codeEdit.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> nsv.post(() -> {
+            codeEdit.requestFocus();
+            nsv.fullScroll(View.FOCUS_DOWN);
+        }));
+
         // We want to display what interpreter writes to output on the app
 
-        System.setOut(new PrintStream(out));
-        System.setErr(new PrintStream(err));
-        interpreter = new Interpreter();
+        interpreter = new BshInterpreter();
+        interpreter.setOutputStream(new PrintStream(out));
+        interpreter.setErrorStream(new PrintStream(err));
         try {
             initializeInterpreter(interpreter);
-        } catch (EvalError evalError) {
-            evalError.printStackTrace();
+        } catch (SnippetEvalException e) {
+            e.printStackTrace();
         }
     }
 
     // set common variables etc...
-    void initializeInterpreter(Interpreter interpreter) throws EvalError {
-        interpreter.set("context", this);
+    void initializeInterpreter(SnippetInterpreter interpreter) throws SnippetEvalException {
+        interpreter.setVariable("context", this);
     }
 
     @Override
@@ -127,14 +125,14 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             Object result = interpreter.eval(code);
-            String valClass =  result != null ? (": " + result.getClass().toString()) : "";
+            String valClass =  result != null ? (": " + result.getClass()) : "";
 
             // if any output to stdout, stderr, print it
             String outStr = readOutput(out);
             String errStr = readOutput(err);
 
             HistoryItem historyItem = HistoryItem.success(code, outStr, errStr,
-                    Objects.toString(result) + valClass);
+                    result + valClass);
             history.add(historyItem);
             adapter.notifyItemInserted(history.size()-1);
         } catch (Exception e) {
@@ -148,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // read output from a ByteArrayOutputStream and reset it
-    // append \n for readability, if there's any output.
     private static String readOutput(ByteArrayOutputStream stream) {
         String result = stream.toString();
         stream.reset();
@@ -188,5 +185,17 @@ public class MainActivity extends AppCompatActivity {
             codeEdit.setText(codeText);
             codeEdit.setSelection(codeText.length());
         }
+    }
+
+    public void clearAll(MenuItem item) {
+        int count = history.size();
+        history.clear();
+        historyPos = -1;
+        adapter.notifyItemRangeRemoved(0, count);
+    }
+
+    public void resetInterpreter(MenuItem item) {
+        clearAll(item);
+        interpreter.reset();
     }
 }

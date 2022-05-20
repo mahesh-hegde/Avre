@@ -8,7 +8,18 @@ import bsh.Interpreter;
 
 public class BshInterpreter implements SnippetInterpreter {
     Interpreter ipr = new Interpreter();
-    public BshInterpreter() {}
+    public BshInterpreter() {
+        initializeInterpreter(ipr);
+    }
+
+    @Override
+    public void setVariable(String variable, Object value) throws SnippetEvalException {
+        try {
+            ipr.set(variable, value);
+        } catch (EvalError e) {
+            throw convertEvalError(e);
+        }
+    }
 
     @Override
     public void setOutputStream(OutputStream out) {
@@ -25,15 +36,7 @@ public class BshInterpreter implements SnippetInterpreter {
         try {
             return ipr.eval(snippet);
         } catch (EvalError e) {
-            int lineNum = e.getErrorLineNumber();
-            int colNum = -1;
-            Throwable cause = e.getCause();
-            if (cause == null) {
-                cause = e;
-            }
-            throw new SnippetEvalException(lineNum, colNum, cause.getMessage());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw convertEvalError(e);
         }
     }
 
@@ -44,6 +47,21 @@ public class BshInterpreter implements SnippetInterpreter {
 
     @Override
     public void reset() {
+        ipr = new Interpreter();
+        initializeInterpreter(ipr);
+    }
 
+    private void initializeInterpreter(Interpreter ipr) {
+        // Eval startup file
+    }
+
+    private static SnippetEvalException convertEvalError(EvalError e) {
+        int lineNum = e.getErrorLineNumber();
+        int colNum = -1;
+        Throwable cause = e.getCause();
+        if (cause == null) {
+            cause = e;
+        }
+        return new SnippetEvalException(lineNum, colNum, cause);
     }
 }
