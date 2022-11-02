@@ -27,30 +27,29 @@ import hegde.mahesh.avre.adapters.HistoryAdapter;
 import hegde.mahesh.avre.databinding.ActivityMainBinding;
 import hegde.mahesh.avre.interpreter.BshInterpreter;
 import hegde.mahesh.avre.interpreter.SnippetEvalException;
-import hegde.mahesh.avre.interpreter.SnippetInterpreter;
+import hegde.mahesh.avre.interpreter.LanguageInterpreter;
 import hegde.mahesh.avre.model.HistoryItem;
 
 public class MainActivity extends AppCompatActivity {
-
     private int historyPos = -1;
 
     private AppBarConfiguration mAppBarConfiguration;
+    @SuppressWarnings("FieldCanBeLocal")
     private ActivityMainBinding binding;
 
     List<HistoryItem> history = new ArrayList<>();
     HistoryAdapter adapter;
     private EditText codeEdit;
-    private RecyclerView historyView;
     private NestedScrollView nsv;
 
     private String wasCurrentlyEditing;
 
-    private SnippetInterpreter interpreter;
+    private LanguageInterpreter interpreter;
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
     private final ByteArrayOutputStream err = new ByteArrayOutputStream();
 
-    private void setCodeAndScroll(String code) {
-        codeEdit.setText(code);
+    private void clearCodeAndScroll() {
+        codeEdit.setText("");
         nsv.post(() -> {
             codeEdit.requestFocus();
             nsv.fullScroll(View.FOCUS_DOWN);
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         // initialize view references
         codeEdit = findViewById(R.id.text_code);
         nsv = findViewById(R.id.scroller_avre_prompt);
-        historyView = findViewById(R.id.recycler_view_history);
+        RecyclerView historyView = findViewById(R.id.recycler_view_history);
         adapter = new HistoryAdapter(this,history);
         historyView.setAdapter(adapter);
         historyView.setLayoutManager(new LinearLayoutManager(this));
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // set common variables etc...
-    void initializeInterpreter(SnippetInterpreter interpreter) throws SnippetEvalException {
+    void initializeInterpreter(LanguageInterpreter interpreter) throws SnippetEvalException {
         interpreter.setVariable("context", this);
     }
 
@@ -142,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyItemInserted(history.size()-1);
         }
         historyPos = -1;
-        setCodeAndScroll("");
+        clearCodeAndScroll();
     }
 
     // read output from a ByteArrayOutputStream and reset it

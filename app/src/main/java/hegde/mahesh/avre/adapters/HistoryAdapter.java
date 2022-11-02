@@ -27,7 +27,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryI
     @Override
     public HistoryItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = inflater.inflate(R.layout.history_item, parent, false);
-        return new HistoryItemViewHolder(itemView, this);
+        return new HistoryItemViewHolder(itemView);
     }
 
     @Override
@@ -58,9 +58,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryI
 
     static class HistoryItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView code, result, out, err;
-        RecyclerView.Adapter<HistoryItemViewHolder> adapter;
 
-        public HistoryItemViewHolder(View itemView, HistoryAdapter adapter) {
+        public HistoryItemViewHolder(View itemView) {
             super(itemView);
             code = itemView.findViewById(R.id.history_code);
             result = itemView.findViewById(R.id.history_result);
@@ -70,8 +69,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryI
         }
         @Override
         public void onClick(View v) {
-            // Implement onClick
+            // TODO: Implement onClick
+            throw new RuntimeException("Not implemented");
         }
-
     }
 }

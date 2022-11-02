@@ -5,18 +5,14 @@ import androidx.annotation.Nullable;
 import java.util.Locale;
 
 public class SnippetEvalException extends Exception {
-    int line = 0;
-    int column = 0;
+    int line;
+    int column;
     Throwable cause;
 
     public SnippetEvalException(int line, int column, Throwable cause) {
         super(cause.getMessage());
         this.line = line;
         this.column = column;
-        this.cause = cause;
-    }
-    public SnippetEvalException(Throwable cause) {
-        super(cause.getMessage());
         this.cause = cause;
     }
 

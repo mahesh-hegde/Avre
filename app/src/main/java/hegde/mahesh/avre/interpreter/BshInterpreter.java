@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import bsh.EvalError;
 import bsh.Interpreter;
 
-public class BshInterpreter implements SnippetInterpreter {
+public class BshInterpreter implements LanguageInterpreter {
     Interpreter ipr = new Interpreter();
     public BshInterpreter() {
         initializeInterpreter(ipr);
@@ -41,7 +41,7 @@ public class BshInterpreter implements SnippetInterpreter {
     }
 
     @Override
-    public String[] completions(String partialInput, int position) {
+    public String[] getCompletions(String partialInput, int position) {
         return new String[]{};
     }
 
@@ -51,7 +51,7 @@ public class BshInterpreter implements SnippetInterpreter {
         initializeInterpreter(ipr);
     }
 
-    private void initializeInterpreter(Interpreter ipr) {
+    private void initializeInterpreter(Interpreter ignored) {
         // Eval startup file
     }
 
