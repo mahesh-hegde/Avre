@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="hegde.mahesh.avre.ui.gallery.GalleryFragment"
+        android:name="hegde.mahesh.avre.ui.startup_scripts.StartupScriptsFragment"
         android:label="@string/menu_startup_script"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_startup_scripts" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="hegde.mahesh.avre.ui.slideshow.SlideshowFragment"
+        android:name="hegde.mahesh.avre.ui.about.AboutFragment"
         android:label="@string/menu_about"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_about" />
 </navigation>
