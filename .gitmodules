@@ -1,0 +1,3 @@
+[submodule "app/beanshell"]
+	path = app/beanshell
+	url = https://github.com/mahesh-hegde/beanshell.git

@@ -12,7 +12,7 @@
 #   public *;
 #}
 
--keep class bsh.** { *; }
+-keep class bsh.** { public *; }
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
