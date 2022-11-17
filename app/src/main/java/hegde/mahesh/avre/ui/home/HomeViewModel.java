@@ -1,8 +1,9 @@
 package hegde.mahesh.avre.ui.home;
 
+import android.app.Application;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import hegde.mahesh.avre.database.HistoryRepository;
 import hegde.mahesh.avre.interpreter.BshInterpreter;
 import hegde.mahesh.avre.interpreter.LanguageInterpreter;
@@ -13,7 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /// Stores HomeFragment state
-public class HomeViewModel extends ViewModel {
+public class HomeViewModel extends AndroidViewModel {
     private final LanguageInterpreter interpreter = new BshInterpreter();
     public LiveData<String> getCurrentSnippet() {
         return currentSnippet;
@@ -35,7 +36,7 @@ public class HomeViewModel extends ViewModel {
 
     private int cursor;
 
-    private final HistoryRepository repo = new HistoryRepository();
+    private final HistoryRepository repo;
 
     public List<HistoryItem> getHistoryItems() {
         return repo.getHistory();
@@ -43,7 +44,9 @@ public class HomeViewModel extends ViewModel {
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
     private final ByteArrayOutputStream err = new ByteArrayOutputStream();
 
-    public HomeViewModel() {
+    public HomeViewModel(Application application) {
+        super(application);
+        repo = new HistoryRepository(application);
         interpreter.setOutputStream(out);
         interpreter.setErrorStream(err);
     }
@@ -103,7 +106,7 @@ public class HomeViewModel extends ViewModel {
     public void nextSnippet() {
         List<HistoryItem> history = repo.getHistory();
         String code;
-        cursor = Math.max(cursor + 1, history.size());
+        cursor = Math.min(cursor + 1, history.size());
         if (cursor == history.size()) {
             code = "";
         } else {

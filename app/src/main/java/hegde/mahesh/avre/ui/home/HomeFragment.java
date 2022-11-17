@@ -40,7 +40,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        homeViewModel.getCurrentSnippet().observe(getViewLifecycleOwner(), binding.textCode::setText);
+        homeViewModel.getCurrentSnippet().observe(getViewLifecycleOwner(), text -> {
+            binding.textCode.setText(text);
+            binding.textCode.setSelection(text.length());
+        });
 
         homeViewModel.setInterpreterVariable("context", getContext());
         homeViewModel.setInterpreterVariable("activity", getActivity());
