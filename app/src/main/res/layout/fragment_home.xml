@@ -55,7 +55,6 @@
                     android:id="@+id/button_eval"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="evalCode"
                     android:text="@string/eval_button_text" />
 
                 <androidx.legacy.widget.Space
@@ -74,7 +73,6 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/button_clear_description"
                     android:minHeight="48dp"
-                    android:onClick="clearCode"
                     android:src="@drawable/ic_sharp_clear_24" />
 
                 <androidx.legacy.widget.Space
@@ -88,7 +86,6 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/button_up_description"
                     android:minHeight="48dp"
-                    android:onClick="prevSnippet"
                     android:src="@drawable/ic_sharp_arrow_upward_24" />
 
                 <ImageButton
@@ -97,7 +94,6 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/button_down_description"
                     android:minHeight="48dp"
-                    android:onClick="nextSnippet"
                     android:src="@drawable/ic_sharp_arrow_downward_24" />
             </LinearLayout>
 

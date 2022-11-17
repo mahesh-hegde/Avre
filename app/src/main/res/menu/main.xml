@@ -6,13 +6,11 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_baseline_clean"
-        android:onClick="clearAll"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/reset_interpreter"
         android:orderInCategory="200"
         android:title="@string/reset_interpreter"
-        android:onClick="resetInterpreter"
         app:showAsAction="never" />
 
 </menu>
