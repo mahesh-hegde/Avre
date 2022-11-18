@@ -1,15 +1,15 @@
 package hegde.mahesh.avre.ui.home;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import hegde.mahesh.avre.R;
 import hegde.mahesh.avre.adapters.HistoryAdapter;
 import hegde.mahesh.avre.databinding.FragmentHomeBinding;
+import org.jetbrains.annotations.NotNull;
 
 public class HomeFragment extends Fragment {
 
@@ -63,14 +63,21 @@ public class HomeFragment extends Fragment {
         binding.buttonUp.setOnClickListener(v -> homeViewModel.previousSnippet());
         binding.buttonDown.setOnClickListener(v -> homeViewModel.nextSnippet());
 
+        setHasOptionsMenu(true);
         return root;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main, menu);
     }
 
     private void adjustScroll() {
         binding.scrollerAvrePrompt.post(() -> {
             binding.textCode.requestFocus();
             binding.scrollerAvrePrompt.fullScroll(View.FOCUS_DOWN);
-        });
+       });
     }
 
     @Override
