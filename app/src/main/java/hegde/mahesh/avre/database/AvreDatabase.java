@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {HistoryItem.class}, version = 1, exportSchema = false)
-abstract class AvreDatabase extends RoomDatabase {
+public abstract class AvreDatabase extends RoomDatabase {
     public abstract HistoryDao historyDao();
 
     // marking the instance as volatile to ensure atomic access to the variable
@@ -19,7 +19,7 @@ abstract class AvreDatabase extends RoomDatabase {
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    static AvreDatabase getDatabase(final Context context) {
+    public static AvreDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (AvreDatabase.class) {
                 if (INSTANCE == null) {

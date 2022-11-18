@@ -4,6 +4,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import hegde.mahesh.avre.database.AvreDatabase;
 import hegde.mahesh.avre.database.HistoryRepository;
 import hegde.mahesh.avre.interpreter.BshInterpreter;
 import hegde.mahesh.avre.interpreter.LanguageInterpreter;
@@ -46,7 +47,8 @@ public class HomeViewModel extends AndroidViewModel {
 
     public HomeViewModel(Application application) {
         super(application);
-        repo = new HistoryRepository(application);
+        AvreDatabase db = AvreDatabase.getDatabase(application);
+        repo = new HistoryRepository(db);
         interpreter.setOutputStream(out);
         interpreter.setErrorStream(err);
     }

@@ -1,6 +1,5 @@
 package hegde.mahesh.avre.database;
 
-import android.app.Application;
 import hegde.mahesh.avre.model.HistoryItem;
 
 import java.util.ArrayList;
@@ -10,8 +9,7 @@ public class HistoryRepository {
     private final HistoryDao dao;
     private List<HistoryItem> history = new ArrayList<>();
 
-    public HistoryRepository(Application application) {
-        AvreDatabase db = AvreDatabase.getDatabase(application);
+    public HistoryRepository(AvreDatabase db) {
         dao = db.historyDao();
         db.getQueryExecutor().execute(() -> history = dao.getAll());
     }
