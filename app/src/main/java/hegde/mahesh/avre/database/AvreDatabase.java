@@ -24,7 +24,7 @@ public abstract class AvreDatabase extends RoomDatabase {
             synchronized (AvreDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    AvreDatabase.class, "word_database")
+                                    AvreDatabase.class, "avre_database")
                             .build();
                 }
             }
