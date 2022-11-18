@@ -18,4 +18,5 @@
     <string name="button_down_description">Next command in history</string>
     <string name="button_clear_description">Clear code</string>
     <string name="reset_interpreter">Reset</string>
+    <string name="an_exception_occurred">An exception occurred!</string>
 </resources>

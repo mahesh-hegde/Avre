@@ -1,5 +1,6 @@
 package hegde.mahesh.avre.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,21 +29,24 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryI
         return new HistoryItemViewHolder(itemView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull HistoryItemViewHolder holder, int position) {
         HistoryItem current = history.get(position);
         holder.code.setText(current.code);
+
         if (current.out.isEmpty()) {
             holder.out.setVisibility(View.GONE);
         }
+
         holder.out.setText(current.out);
 
         if (current.err.isEmpty()) {
             holder.err.setVisibility(View.GONE);
         }
         holder.err.setText(current.err);
-        if (current.exception != null) {
-            holder.result.setText(current.exception.getMessage());
+        if (current.exception != null || current.stackTrace != null) {
+            holder.result.setText(R.string.an_exception_occurred);
             holder.result.setTextColor(0xffff0000);
         } else {
             holder.result.setText(current.res);
