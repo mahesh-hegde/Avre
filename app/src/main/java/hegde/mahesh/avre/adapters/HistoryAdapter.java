@@ -26,7 +26,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryI
     }
 
     public void setBegin(int begin) {
-        int oldBegin = this.begin;
         this.begin = begin;
         notifyItemRangeRemoved(0, mItemCount);
     }

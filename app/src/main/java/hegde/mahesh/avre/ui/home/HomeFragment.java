@@ -15,7 +15,6 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
-    private int lastVisibleHistoryStart = 0;
     private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
