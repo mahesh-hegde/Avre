@@ -29,11 +29,11 @@ public class HomeViewModel extends AndroidViewModel {
 
     public final MutableLiveData<Integer> visibleHistoryStart = new MutableLiveData<>(0);
 
-    public LiveData<Integer> getLastAppendedPosition() {
-        return lastAppendedPosition;
+    public LiveData<Integer> getHistorySize() {
+        return historySize;
     }
 
-    public final MutableLiveData<Integer> lastAppendedPosition = new MutableLiveData<>(-1);
+    public final MutableLiveData<Integer> historySize = new MutableLiveData<>();
 
     private int cursor;
 
@@ -49,6 +49,10 @@ public class HomeViewModel extends AndroidViewModel {
         super(application);
         AvreDatabase db = AvreDatabase.getDatabase(application);
         repo = new HistoryRepository(db);
+        initializeInterpreter();
+    }
+
+    private void initializeInterpreter() {
         interpreter.setOutputStream(out);
         interpreter.setErrorStream(err);
     }
@@ -68,8 +72,9 @@ public class HomeViewModel extends AndroidViewModel {
             HistoryItem failure = HistoryItem.failure(snippet, readOutput(out), readOutput(err), e);
             repo.addItem(failure);
         }
-        cursor = repo.getHistorySize();
-        lastAppendedPosition.setValue(cursor - 1);
+        int size = repo.getHistorySize();
+        cursor = size;
+        historySize.setValue(size);
     }
 
     public void setInterpreterVariable(String name, Object value) {
@@ -82,13 +87,14 @@ public class HomeViewModel extends AndroidViewModel {
 
     public void clearVisibleHistory() {
         visibleHistoryStart.setValue(repo.getHistorySize());
+        historySize.setValue(0);
+        cursor = 0;
     }
 
     public void reset() {
         repo.reset();
-        cursor = 0;
-        visibleHistoryStart.setValue(0);
         interpreter.reset();
+        clearVisibleHistory();
     }
 
     public void previousSnippet() {

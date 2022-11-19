@@ -16,11 +16,11 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     private int lastVisibleHistoryStart = 0;
+    private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -29,14 +29,11 @@ public class HomeFragment extends Fragment {
         binding.recyclerViewHistory.setAdapter(adapter);
         binding.recyclerViewHistory.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        homeViewModel.getVisibleHistoryStart().observe(getViewLifecycleOwner(), visibleHistoryStart -> {
-            adapter.notifyItemRangeChanged(lastVisibleHistoryStart, visibleHistoryStart);
-            lastVisibleHistoryStart = visibleHistoryStart;
-        });
+        homeViewModel.getVisibleHistoryStart().observe(getViewLifecycleOwner(), adapter::setBegin);
 
-        homeViewModel.getLastAppendedPosition().observe(getViewLifecycleOwner(), last -> {
-            if (last != -1) {
-                adapter.notifyItemInserted(last);
+        homeViewModel.getHistorySize().observe(getViewLifecycleOwner(), size -> {
+            if (size != 0) {
+                adapter.notifyItemAppended();
             }
         });
 
@@ -71,6 +68,19 @@ public class HomeFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.clear_history) {
+            homeViewModel.clearVisibleHistory();
+        } else if (itemId == R.id.reset_interpreter) {
+            homeViewModel.reset();
+        } else {
+            throw new RuntimeException("No handler for menu item id " + itemId);
+        }
+        return true;
     }
 
     private void adjustScroll() {

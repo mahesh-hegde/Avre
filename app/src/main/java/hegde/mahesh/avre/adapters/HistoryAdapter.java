@@ -2,6 +2,7 @@ package hegde.mahesh.avre.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,19 @@ import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryItemViewHolder> {
     List<HistoryItem> history;
+    int begin;
+    int mItemCount;
     LayoutInflater inflater;
 
     public HistoryAdapter(Context context, List<HistoryItem> history) {
         this.inflater = LayoutInflater.from(context);
         this.history = history;
+    }
+
+    public void setBegin(int begin) {
+        int oldBegin = this.begin;
+        this.begin = begin;
+        notifyItemRangeRemoved(0, mItemCount);
     }
 
     @NonNull
@@ -32,7 +41,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryI
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull HistoryItemViewHolder holder, int position) {
-        HistoryItem current = history.get(position);
+        HistoryItem current = history.get(position + begin);
         holder.code.setText(current.code);
 
         if (current.out.isEmpty()) {
@@ -55,7 +64,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryI
 
     @Override
     public int getItemCount() {
-        return history.size();
+        Log.d("AVRE", "size = " + history.size() + ", begin = " + begin);
+        mItemCount = history.size() - begin;
+        return mItemCount;
+    }
+
+    public void notifyItemAppended() {
+        notifyItemInserted(getItemCount() - 1);
     }
 
     static class HistoryItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -71,8 +86,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryI
         }
         @Override
         public void onClick(View v) {
-            // TODO: Implement onClick
-            throw new RuntimeException("Not implemented");
+            // throw new RuntimeException("Not implemented");
         }
     }
 }

@@ -16,5 +16,5 @@ public interface HistoryDao {
     void insert(HistoryItem item);
 
     @Query("DELETE FROM history")
-    void delete();
+    void deleteAll();
 }

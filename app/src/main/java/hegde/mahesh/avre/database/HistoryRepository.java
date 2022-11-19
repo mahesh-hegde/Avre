@@ -27,11 +27,8 @@ public class HistoryRepository {
         return history.size();
     }
 
-    public HistoryItem getItem(int i) {
-        return history.get(i);
-    }
-
     public void reset() {
         history.clear();
+        AvreDatabase.databaseWriteExecutor.execute(dao::deleteAll);
     }
 }
